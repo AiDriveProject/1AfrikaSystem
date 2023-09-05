@@ -381,3 +381,10 @@
     padding-right: 0;
     border-right: none;
 }
+.chat-bot {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    border: none;
+    z-index: 1000;
+}
