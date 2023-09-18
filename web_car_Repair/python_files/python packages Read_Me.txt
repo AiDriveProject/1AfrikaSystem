@@ -1,5 +1,5 @@
 Python Modeules to install for the API 
-google.coud.dialogflow
+google.cloud.dialogflow
 flask
 flask_cors
 json
