@@ -54,7 +54,7 @@ class Chatbox {
 
         await this.sleep(3000);
 
-        fetch('http://127.0.0.1:5000/api/endpoint', {
+        fetch('/cgi-bin/main.py/api/endpoint', {
             method: 'POST',
             body: JSON.stringify({ message: text1 }),
             headers: {
