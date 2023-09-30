@@ -19,12 +19,13 @@
             <div class="form login">
                 <div class="form-content">
                     <header>Login</header>
-                    <form action="#" method="post">
+                    <form method="POST">
+                         {% csrf_token %}
                         <div class="field input-field">
-                            <input type="email" placeholder="Email" class="input">
+                            <input type="email" placeholder="Email" name="email" required class="input">
                         </div>
                         <div class="field input-field">
-                            <input type="password" placeholder="Password" class="password">
+                            <input type="password" placeholder="Password" name="password" required class="password">
                             <i class='bx bx-hide eye-icon'></i>
                         </div>
                         <div class="form-link">

@@ -52,8 +52,8 @@
 
       <div class="newsletter">
 
-        <form action="#">
-
+       <form method="POST">
+         {% csrf_token %}
           <div class="newsletter-header">
 
             <h3 class="newsletter-title">Subscribe Newsletter.</h3>
@@ -183,7 +183,8 @@
       </div>
 
     </div>
-
+<form method="POST">
+  {% csrf_token %}
     <div class="header-main">
 
       <div class="container">
@@ -223,7 +224,7 @@
       </div>
 
     </div>
-
+ </form>
     <nav class="desktop-navigation-menu">
 
       <div class="container">

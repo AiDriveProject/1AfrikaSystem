@@ -5,10 +5,12 @@ urlpatterns = [
     path("", views.Home),
     path("DashBoard", views.DashBoard),
     path("Restaurant", views.OrderFood),
+    path("Renting", views.Renting),
     path("Repair", views.Repair),
     path("FindItems", views.Transportation),
     path("Selling", views.Selling),
     path("ProductUpload", views.Product),
     path("LogIn", views.LogIn),
-    path("Register", views.Register)
+    path("Register", views.Register),
+    path("Team", views.Team)
 ]

@@ -16,7 +16,7 @@
   <!-- 
     - favicon
   -->
-  <link rel="shortcut icon" href="static/./favicon.svg" type="static/image/svg+xml">
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
   <!-- 
     - google font link
@@ -113,7 +113,7 @@
     <div class="container">
 
       <a href="#" class="logo">
-        <img src="static/./assets/images/log.svg" width="160" height="50" alt="AiFood - Home">
+        <img src="static/./assets/images/logo.svg" width="160" height="50" alt="AiFood - Home">
       </a>
 
       <nav class="navbar" data-navbar>
@@ -759,8 +759,8 @@
 
           <div class="form reservation-form bg-black-10">
 
-            <form action="" class="form-left">
-
+            <form method="POST">
+               {% csrf_token %}
               <h2 class="headline-1 text-center">Online Reservation</h2>
 
               <p class="form-text text-center">
@@ -769,9 +769,9 @@
               </p>
 
               <div class="input-wrapper">
-                <input type="text" name="name" placeholder="Your Name" autocomplete="off" class="input-field">
+                <input type="text" name="name" required placeholder="Your Name" autocomplete="off" class="input-field">
 
-                <input type="tel" name="phone" placeholder="Phone Number" autocomplete="off" class="input-field">
+                <input type="tel" name="phone" required placeholder="Phone Number" autocomplete="off" class="input-field">
               </div>
 
               <div class="input-wrapper">
@@ -779,7 +779,7 @@
                 <div class="icon-wrapper">
                   <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
 
-                  <select name="person" class="input-field">
+                  <select name="oneperson" required class="input-field">
                     <option value="1-person">1 Person</option>
                     <option value="2-person">2 Person</option>
                     <option value="3-person">3 Person</option>
@@ -803,7 +803,7 @@
                 <div class="icon-wrapper">
                   <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
 
-                  <select name="person" class="input-field">
+                  <select name=hours" required class="input-field">
                     <option value="08:00am">08 : 00 am</option>
                     <option value="09:00am">09 : 00 am</option>
                     <option value="010:00am">10 : 00 am</option>
@@ -826,7 +826,7 @@
 
               </div>
 
-              <textarea name="message" placeholder="Message" autocomplete="off" class="input-field"></textarea>
+              <textarea name="message" required placeholder="Message" autocomplete="off" class="input-field"></textarea>
 
               <button type="submit" class="btn btn-secondary">
                 <span class="text text-1">Book A Table</span>

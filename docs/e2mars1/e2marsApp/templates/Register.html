@@ -13,18 +13,19 @@
         <h1>Register to our Car Service</h1>
         <p>OneAfrica_Car System provides Good car Services for All what Our Clients Deserves like Ford, Burnz etc.</p>
       </div>
-      <form action="/" method="post">
+       <form method="POST">
+        {% csrf_token %}
         <div class="title">
           <i class="fas fa-pencil-alt"></i> 
           <h2>Register here</h2>
         </div>
         <div class="info">
-          <input class="f_name" type="text" name="name" placeholder="Full name">
-          <input type="email" name="name" placeholder="Email">
-          <input type="text" name="name" placeholder="Phone number">
-          <input type="password" name="name" placeholder="Password">
-          <input type="co_password" name="name" placeholder="Confirm Password">
-          <select>
+          <input class="f_name" type="text" name="name" required placeholder="Full name">
+          <input type="email" name="email" required placeholder="Email">
+          <input type="text" name="phone" required placeholder="Phone number">
+          <input type="password" name="password" required placeholder="Password">
+          <input type="co_password" name="conpassword" required placeholder="Confirm Password">
+          <select name="service" required>
 
             <option value="service-type" selected>Service type*</option>
             <option value="car-rental">Car Rental</option>
@@ -33,9 +34,9 @@
           </select>
         </div>
         <div class="checkbox">
-          <input type="checkbox" name="checkbox"><span>I agree to the: <a href="#"> Privacy Policy for OneAfrica_Car System.</a></span>
+          <input type="checkbox" name="checkbox" required ><span>I agree to the: <a href="#"> Privacy Policy for OneAfrica_Car System.</a></span>
         </div>
-        <button type="submit" href="/">Register</button>
+        <button type="submit" >Register</button>
         <a href="logins.html" class="back">Back To Login</a>
       </form>
     </div>
