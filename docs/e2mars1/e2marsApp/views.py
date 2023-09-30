@@ -60,6 +60,7 @@ def LogIn(required):
         print(f'Email: {email} Password:{password} ')
     return render(required, "logins.html")
 
+
 def Product(required):
     if required.method == "POST":
         pname = required.POST.get('Pname')

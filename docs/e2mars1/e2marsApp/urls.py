@@ -14,3 +14,4 @@ urlpatterns = [
     path("Register", views.Register),
     path("Team", views.Team)
 ]
+
