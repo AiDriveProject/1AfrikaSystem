@@ -672,6 +672,7 @@ Feel free to reach out to us through our contact form, email, or phone number pr
             <div class="chatbox_footer">
 
                 <form id="chat-form" method="post" action="/api/endpoint">
+
                     <input type="text" name="message" placeholder="Write a message...">
                     <button type="submit" class="chatbox_send--footer send_button">Send</button>
                 </form>
@@ -686,7 +687,9 @@ Feel free to reach out to us through our contact form, email, or phone number pr
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-
+    <script>
+       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
 
 
     <!-- JavaScript Libraries -->

@@ -1,3 +1,4 @@
+import json
 import os
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -6,12 +7,15 @@ from google.cloud import dialogflow
 from google.protobuf.json_format import MessageToJson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 
 
 # Create your views here.
+
+
 def Home(required):
-    if required.method=="POST":
+    if required.method == "POST":
         email = required.POST.get('email')
         name = required.POST.get('name')
         service = required.POST.get('service')
@@ -19,26 +23,30 @@ def Home(required):
         requests = required.POST.get('requests')
         print(f'Email: {email} Password: {name} Sevice: {service} Sevice_Date: {service_Date} Request: {requests}')
     if required.method == "POST":
-        subemail=required.POST.get('subemail')
+        subemail = required.POST.get('subemail')
         print(f"Subscribe Email : {subemail}")
     return render(required, "index.html")
+
 
 def Transportation(required):
     return render(required, "FindItems.html")
 
+
 def Renting(required):
-    if required.method=="POST":
+    if required.method == "POST":
         search = required.POST.get('search')
         email = required.POST.get('email')
         print(f"search: {search} email: {email}")
     return render(required, "Selling.html")
 
+
 def Selling(required):
-    if required.method=="POST":
+    if required.method == "POST":
         search = required.POST.get('search')
         email = required.POST.get('email')
         print(f"search: {search} email: {email}")
     return render(required, "Selling.html")
+
 
 def OrderFood(required):
     if required.method == "POST":
@@ -52,8 +60,11 @@ def OrderFood(required):
             f'Person: {oneperson} || Name: {name} || Message: {message} || Phone Number: {phone} || Date: {date} || Hours: {hours}')
 
     return render(required, "Restaurant.html")
+
+
 def Repair(required):
     return render(required, "Repair.html")
+
 
 def Team(required):
     if required.method == "POST":
@@ -61,8 +72,9 @@ def Team(required):
         print(f"Subscribe From Team Email : {TeamEmail}")
     return render(required, "team.html")
 
+
 def LogIn(required):
-    if required.method=="POST":
+    if required.method == "POST":
         email = required.POST.get('email')
         password = required.POST.get('password')
         print(f'Email: {email} Password:{password} ')
@@ -83,15 +95,17 @@ def Product(required):
 
     return render(required, "ProductUpload.html")
 
+
 def Register(required):
-    if required.method=="POST":
+    if required.method == "POST":
         email = required.POST.get('email')
         name = required.POST.get('name')
         service = required.POST.get('service')
         phone = required.POST.get('phone')
         password = required.POST.get('password')
         conpassword = required.POST.get('conpassword')
-        print(f'Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
+        print(
+            f'Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
     return render(required, "Register.html")
 
 
@@ -100,6 +114,17 @@ def DashBoard(required):
         dashsearch = required.POST.get('dashsearch')
         print(f"Subscribe From Team Email : {dashsearch}")
     return render(required, "DashBoard.html")
+
+
+def convert(data):
+    if isinstance(data, bytes):
+        return data.decode('ascii')
+    if isinstance(data, dict):
+        return dict(map(convert, data.items()))
+    if isinstance(data, tuple):
+        return map(convert, data)
+
+    return data
 
 
 def detect_intent_text(project_id, session_id, text, language_code='en-US'):
@@ -119,17 +144,21 @@ def detect_intent_text(project_id, session_id, text, language_code='en-US'):
 
     return response.query_result
 
+
 @csrf_exempt
+@require_http_methods(['POST'])
 def chatbot_view(request):
+    print('body', request.body)
+    imput_dict = convert(request.body)
     if request.method == 'POST':
-        print(f"POST Data: {request.POST}")
-        user_input = request.POST.get('message', '')
+        # user_input = request.POST.get('message', '')
+        user_input = json.loads(imput_dict)['message']
         print(f"User Input: {user_input}")
         if user_input.lower() == 'exit':
             return JsonResponse({'botResponse': 'Goodbye!'})
         response = detect_intent_text('aidrive-project', '0123D34', user_input)
         return JsonResponse({'botResponse': response.fulfillment_text})
+        # return HttpResponse(response.fulfillment_text, status=200)
+
     else:
         return JsonResponse({'error': 'Invalid request method'})
-
-
