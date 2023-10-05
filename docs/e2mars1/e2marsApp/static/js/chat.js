@@ -8,6 +8,7 @@ class Chatbox {
 
         this.state = false;
         this.messages = [];
+        this.form = document.getElementById('chat-form');
     }
 
     display() {
@@ -23,6 +24,8 @@ class Chatbox {
                 this.onSendButton(chatBox)
             }
         })
+
+
     }
 
     toggleState(chatbox) {
@@ -46,6 +49,7 @@ class Chatbox {
         if (text1 === "") {
             return;
         }
+        console.log(text1);
         console.log('Sending message...');
 
         let msg1 = { name: "User", message: text1 }
@@ -53,12 +57,14 @@ class Chatbox {
         this.updateChatText(chatbox);
 
         await this.sleep(3000);
+        //const csrftoken = getCookie('csrftoken');
 
-        fetch('/cgi-bin/main.py/api/endpoint', {
+        fetch('api/endpoint', {
             method: 'POST',
             body: JSON.stringify({ message: text1 }),
             headers: {
               'Content-Type': 'application/json'
+              //'X-CSRFToken': csrftoken,
             },
           })
           .then(r => r.json())

@@ -670,8 +670,12 @@ Feel free to reach out to us through our contact form, email, or phone number pr
                 <div></div>
             </div>
             <div class="chatbox_footer">
-                <input type="text" placeholder="Write a message...">
-                <button class="chatbox_send--footer send_button">Send</button>
+
+                <form id="chat-form" method="post" action="/api/endpoint">
+                    <input type="text" name="message" placeholder="Write a message...">
+                    <button type="submit" class="chatbox_send--footer send_button">Send</button>
+                </form>
+
             </div>
         </div>
         <div class="chatbox_button">
