@@ -48,14 +48,34 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
 ]
+# settings.py
+# DATABASES = {
+#     'default': {
+#         # Your default database configuration
+#     },
+#     'session_db': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'session_db.sqlite3',  # Path to your session database file
+#     }
+# }
+# # settings.py
+# SESSION_ENGINE = 'django.contrib.sessions'
+# SESSION_CACHE_ALIAS = 'session_db'
+#
+#
+# SESSION_COOKIE_AGE = 1209600  # Sessions will expire after 2 weeks (in seconds)
+# SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
+# SESSION_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'e2mars1.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates', 'e2mars1')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

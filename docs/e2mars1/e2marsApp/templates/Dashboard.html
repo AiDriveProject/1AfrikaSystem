@@ -73,7 +73,7 @@
 
 	<!-- CONTENT -->
 	 <form method="POST">
-                 {% csrf_token %}
+		 {% csrf_token %}
 	<section id="content">
 		<!-- NAVBAR -->
 		<nav>
@@ -92,7 +92,7 @@
 				<span class="num">8</span>
 			</a>
 			<a href="#" class="profile">
-				<img src="static/img/people.png">
+				<img src="data:image/jpeg;base64,{{image}}" alt="Image Description">
 			</a>
 		</nav>
 		<!-- NAVBAR -->
@@ -101,7 +101,7 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
+					<h1>{{name}}</h1>
 					<ul class="breadcrumb">
 						<li>
 							<a href="#">Dashboard</a>
@@ -159,46 +159,21 @@
 							</tr>
 						</thead>
 						<tbody>
+						{% for data in alldata %}
 							<tr>
 								<td>
-									<img src="static/img/people.png">
-									<p>John Doe</p>
+                                    <img src="" alt="Image Description">
+								</td>
+								<td>
+									<h4>{{ data.name }}</h4>
+								</td>
+								<td>
+									<h4>{{ data.age }}</h4>
 								</td>
 								<td>01-10-2021</td>
 								<td><span class="status completed">Completed</span></td>
 							</tr>
-							<tr>
-								<td>
-									<img src="static/img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="static/img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status process">Process</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="static/img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="static/img/people.png">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
+						{% endfor %}
 						</tbody>
 					</table>
 				</div>

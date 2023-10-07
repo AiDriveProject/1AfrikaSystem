@@ -64,6 +64,27 @@ form{
     padding: 0 15px;
     border: 1px solid#CACACA;
 }
+.buttons1{
+ border-radius: 6px;
+ align: center
+ color:#fff;
+ display:block;
+ height:48px;
+ radius: 26px;
+    background-color: #0171d3;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text: "Log in"
+
+
+}
+.h{
+color:#fff;
+text-align:center;
+weight:23px;
+margin-top: 0px;
+padding-top:10px;
+}
 .field input:focus{
     border-bottom-width: 2px;
 }
