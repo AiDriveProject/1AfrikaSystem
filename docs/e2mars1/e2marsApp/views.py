@@ -151,6 +151,7 @@ def DashBoard(required):
     email = required.session['email']
     password = required.session['password']
 
+
     alldata = [{'name': "Baraka", 'age': 23}, {'name': "Daniel", 'age': 32}, {'name': "Luc", 'age': 12}]
     data = DatabaseConnection.Read_in_MySQL_Image(email, password)
     if data is None:
