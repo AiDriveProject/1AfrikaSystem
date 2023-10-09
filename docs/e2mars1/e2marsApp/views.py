@@ -1,5 +1,15 @@
 import json
 import os
+import json
+import os
+from django.shortcuts import render
+from django.http import HttpResponse,HttpResponseRedirect
+
+from django.urls import reverse
+from django.shortcuts import redirect
+from io import BytesIO
+import base64
+from django import template
 from django.shortcuts import render
 from django.http import HttpResponse
 import subprocess
@@ -13,6 +23,7 @@ from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 
+
 def Home(required):
     if required.method == "POST":
         email = required.POST.get('email')
@@ -20,12 +31,10 @@ def Home(required):
         service = required.POST.get('service')
         service_Date = required.POST.get('service_date')
         requests = required.POST.get('requests')
-
         print(f'Email: {email} Password: {name} Sevice: {service} Sevice_Date: {service_Date} Request: {requests}')
     if required.method == "POST":
         subemail = required.POST.get('subemail')
         print(f"Subscribe Email : {subemail}")
-
     return render(required, "index.html")
 
 
@@ -59,6 +68,7 @@ def OrderFood(required):
         hours = required.POST.get('hours')
         print(
             f'Person: {oneperson} || Name: {name} || Message: {message} || Phone Number: {phone} || Date: {date} || Hours: {hours}')
+
     return render(required, "Restaurant.html")
 
 
@@ -79,10 +89,9 @@ def LogIn(required):
         password = required.POST.get('password')
 
         if email:
-           required.session['email'] = email
-           required.session['password'] = password
-           print(f'Email: {email} Password:{password} ')
-           return HttpResponseRedirect('DashBoard')
+            required.session['email'] = email
+            required.session['password'] = password
+            return HttpResponseRedirect('DashBoard')
 
     return render(required, "logins.html")
 
@@ -103,8 +112,6 @@ def Product(required):
 
 
 def Register(required):
-
-
     if required.method == "POST":
         imageUpload = required.POST.get('imageUpload')
         email = required.POST.get('email')
@@ -113,6 +120,9 @@ def Register(required):
         phone = required.POST.get('phone')
         password = required.POST.get('password')
         conpassword = required.POST.get('conpassword')
+        import DatabaseConnection
+        DatabaseConnection.connection.reconnect()
+        DatabaseConnection.saving_in_MySQL_User_details_with_images("C:\\Users\\AppFactory\\Pictures\\Screenshots\\Images INsparation\\riana1.jpg", name, email, phone, service, password)
         print(
             f'Photo: {imageUpload} Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
 
@@ -132,22 +142,21 @@ class YourAppNameConfig(AppConfig):
         import e2mars1App.custom_filters
 
 def DashBoard(required):
-    import DatabaseConnection
-    DatabaseConnection.connection.reconnect()
-
-    email = "riana@gmailcom"
-    emails = "mic@gmail.com"
-    password = 12345
-    passwords = 123321
-
-    alldata = [{'name': "Baraka", 'age': 23}, {'name': "Daniel", 'age': 32}, {'name': "Luc", 'age': 12}]
-    data = DatabaseConnection.Read_in_MySQL_Image(email, password)
-    print(email, password)
 
     if required.method == "POST":
         dashsearch = required.POST.get('dashsearch')
         print(f"Subscribe From Team Email : {dashsearch}")
-    return render(required, "DashBoard.html")
+    import DatabaseConnection
+    DatabaseConnection.connection.reconnect()
+    email = required.session['email']
+    password = required.session['password']
+
+    alldata = [{'name': "Baraka", 'age': 23}, {'name': "Daniel", 'age': 32}, {'name': "Luc", 'age': 12}]
+    data = DatabaseConnection.Read_in_MySQL_Image(email, password)
+    if data is None:
+       return HttpResponseRedirect('LogIn')
+
+    return render(required, 'DashBoard.html', {'alldata': alldata, 'image': b64encode(data[1]), 'name': data[2]})
 
 
 def convert(data):
