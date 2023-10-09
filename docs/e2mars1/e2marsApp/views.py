@@ -115,6 +115,12 @@ def DashBoard(required):
         print(f"Subscribe From Team Email : {dashsearch}")
     return render(required, "DashBoard.html")
 
+def Taxi(required):
+    if required.method == "POST":
+        dashsearch = required.POST.get('dashsearch')
+        print(f"Subscribe From Team Email : {dashsearch}")
+    return render(required, "Taxi.html")
+
 
 def convert(data):
     if isinstance(data, bytes):

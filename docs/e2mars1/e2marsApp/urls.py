@@ -13,6 +13,7 @@ urlpatterns = [
     path("LogIn", views.LogIn),
     path("Register", views.Register),
     path("Team", views.Team),
+    path("Taxi", views.Taxi),
     path('api/endpoint', views.chatbot_view, name='chatbot_view'),
 ]
 
