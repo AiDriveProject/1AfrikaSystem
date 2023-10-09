@@ -10,6 +10,8 @@ from django.shortcuts import redirect
 from io import BytesIO
 import base64
 from django import template
+import json
+import os
 from django.shortcuts import render
 from django.http import HttpResponse
 import subprocess
@@ -141,6 +143,7 @@ class YourAppNameConfig(AppConfig):
     def ready(self):
         import e2mars1App.custom_filters
 
+
 def DashBoard(required):
 
     if required.method == "POST":
@@ -157,6 +160,59 @@ def DashBoard(required):
        return HttpResponseRedirect('LogIn')
 
     return render(required, 'DashBoard.html', {'alldata': alldata, 'image': b64encode(data[1]), 'name': data[2]})
+
+
+def convert(data):
+    if isinstance(data, bytes):
+        return data.decode('ascii')
+    if isinstance(data, dict):
+        return dict(map(convert, data.items()))
+    if isinstance(data, tuple):
+        return map(convert, data)
+
+    return data
+
+
+def detect_intent_text(project_id, session_id, text, language_code='en-US'):
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    credentials_file_path = os.path.join(project_root, "AidriveCredentials.json")
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_file_path
+
+    session_client = dialogflow.SessionsClient()
+
+    session = session_client.session_path(project_id, session_id)
+    text_input = dialogflow.TextInput(text=text, language_code=language_code)
+    query_input = dialogflow.QueryInput(text=text_input)
+
+    response = session_client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+
+    return response.query_result
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def chatbot_view(request):
+    print('body', request.body)
+    imput_dict = convert(request.body)
+    if request.method == 'POST':
+        # user_input = request.POST.get('message', '')
+        user_input = json.loads(imput_dict)['message']
+        print(f"User Input: {user_input}")
+        if user_input.lower() == 'exit':
+            return JsonResponse({'botResponse': 'Goodbye!'})
+        response = detect_intent_text('aidrive-project', '0123D34', user_input)
+        return JsonResponse({'botResponse': response.fulfillment_text})
+        # return HttpResponse(response.fulfillment_text, status=200)
+
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+def Taxi(required):
+    if required.method == "POST":
+        dashsearch = required.POST.get('dashsearch')
+        print(f"Subscribe From Team Email : {dashsearch}")
+    return render(required, "Taxi.html")
 
 
 def convert(data):

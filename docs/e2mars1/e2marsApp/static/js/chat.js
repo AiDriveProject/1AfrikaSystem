@@ -8,6 +8,7 @@ class Chatbox {
 
         this.state = false;
         this.messages = [];
+        this.form = document.getElementById('chat-form');
     }
 
     display() {
@@ -15,14 +16,63 @@ class Chatbox {
 
         openButton.addEventListener('click', () => this.toggleState(chatBox))
 
-        sendButton.addEventListener('click', () => this.onSendButton(chatBox))
+        // Handle form submission
+        const form = chatBox.querySelector('#chat-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the form from submitting normally
 
-        const node = chatBox.querySelector('input');
-        node.addEventListener("keyup", ({key}) => {
-            if (key === "Enter") {
-                this.onSendButton(chatBox)
+            const text1 = form.querySelector('input[name="message"]').value;
+
+            if (text1 === "") {
+                return;
             }
-        })
+
+            console.log(text1);
+            console.log('Sending message...');
+
+            // Get the CSRF token from the form
+            // const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+            let msg1 = { name: "User", message: text1 }
+            this.messages.push(msg1);
+            this.updateChatText(chatBox);
+
+            await this.sleep(3000);
+
+            fetch('api/endpoint', {
+                method: 'POST',
+                body: JSON.stringify({ message: text1 }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    //'X-CSRFToken': csrfToken, // Include the CSRF token in the headers
+                },
+            })
+            .then(r => r.json())
+            .then(data => {
+                let msg2 = { name: "AIDrive", message: data.botResponse };
+                this.messages.push(msg2);
+                this.updateChatText(chatBox);
+
+                 e.preventDefault();
+                 // Display the bot's response in the chatbox
+                const chatmessage = chatBox.querySelector('.chatbox_messages');
+                chatmessage.innerHTML += '<div class="messages_item messages_item--operator">' + data.botResponse + '</div>';
+                form.querySelector('input[name="message"]').value = '';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                this.updateChatText(chatBox);
+                form.querySelector('input[name="message"]').value = '';
+            });
+        });
+
+
+
+
+
+
+
+
     }
 
     toggleState(chatbox) {
@@ -46,6 +96,7 @@ class Chatbox {
         if (text1 === "") {
             return;
         }
+        console.log(text1);
         console.log('Sending message...');
 
         let msg1 = { name: "User", message: text1 }
@@ -53,12 +104,14 @@ class Chatbox {
         this.updateChatText(chatbox);
 
         await this.sleep(3000);
+        //const csrftoken = getCookie('csrftoken');
 
-        fetch('/cgi-bin/main.py/api/endpoint', {
+        fetch('api/endpoint', {
             method: 'POST',
             body: JSON.stringify({ message: text1 }),
             headers: {
               'Content-Type': 'application/json'
+              //'X-CSRFToken': csrftoken,
             },
           })
           .then(r => r.json())
