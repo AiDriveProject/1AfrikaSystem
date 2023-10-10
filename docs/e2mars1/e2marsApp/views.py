@@ -157,7 +157,7 @@ def DashBoard(required):
     alldata = [{'name': "Baraka", 'age': 23}, {'name': "Daniel", 'age': 32}, {'name': "Luc", 'age': 12}]
     data = DatabaseConnection.Read_in_MySQL_Image(email, password)
     if data is None:
-       return HttpResponseRedirect('LogIn')
+       return HttpResponseRedirect('LogIn', {'error': "Wrong password or Email"})
 
     return render(required, 'DashBoard.html', {'alldata': alldata, 'image': b64encode(data[1]), 'name': data[2]})
 
