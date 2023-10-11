@@ -94,7 +94,6 @@ try:
         connection.commit()
         print("Value processed as successfully.")
 
-
     def Read_in_MySQL_Image(email: str, password: str):
         cursor = connection.cursor()
         select_query = f"SELECT * FROM `User_Details` WHERE email ='{email}' AND password = {password}"

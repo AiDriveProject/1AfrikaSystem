@@ -143,7 +143,6 @@ class YourAppNameConfig(AppConfig):
     def ready(self):
         import e2mars1App.custom_filters
 
-
 def DashBoard(required):
 
     if required.method == "POST":
@@ -160,7 +159,6 @@ def DashBoard(required):
        return HttpResponseRedirect('LogIn', {'error': "Wrong password or Email"})
 
     return render(required, 'DashBoard.html', {'alldata': alldata, 'image': b64encode(data[1]), 'name': data[2]})
-
 
 def convert(data):
     if isinstance(data, bytes):
