@@ -18,8 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+app_name = 'e2marsApp'
 urlpatterns = [
+    path("", include("e2marsApp.urls")),
+    path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
-    path("", include("e2marsApp.urls"))
-]
+    path('social-auth/', include('social_django.urls', namespace='social')),
 
+]

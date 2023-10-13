@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -25,9 +24,9 @@ SECRET_KEY = 'django-insecure-xinyjkry_+uk-v9q2_2(4ux4v4kmtfit9u&vfq3(7)#_g7v_ie
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1']
 
-
+SITE_ID = 2
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,7 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "e2marsApp"
+    "e2marsApp",
+    # "django.contrib.sites",
+    "allauth",
+    "social_django",
+    "allauth.account",
+    "allauth.socialaccount",
+    'allauth.socialaccount.providers.google',
+    "allauth.socialaccount.providers.facebook",
 ]
 
 MIDDLEWARE = [
@@ -45,37 +51,47 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
-# settings.py
-# DATABASES = {
-#     'default': {
-#         # Your default database configuration
-#     },
-#     'session_db': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'session_db.sqlite3',  # Path to your session database file
-#     }
-# }
-# # settings.py
-# SESSION_ENGINE = 'django.contrib.sessions'
-# SESSION_CACHE_ALIAS = 'session_db'
-#
-#
-# SESSION_COOKIE_AGE = 1209600  # Sessions will expire after 2 weeks (in seconds)
-# SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
-# SESSION_COOKIE_SECURE = True
+
+AUTHENTICATION_BACKENDS = [
+    # ...
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+    # ...
+]
+
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 
 ROOT_URLCONF = 'e2mars1.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates', 'e2mars1')],
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # 'DIRS': ['./templates', ],
+        'DIRS': ['templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,7 +106,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'e2mars1.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -100,7 +115,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -120,7 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -132,18 +145,30 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'e2marsApp/static')
-]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'media/'
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'social_django.context_processors.backends',
+    'social_django.context_processors.login_redirect',
+)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# login_url = 'logins'
+LOGIN_URL = 'logins'
+# LOGIN_REDIRECT_URL = 'index'
+login_redirect_url = "index"
+# logout_url = 'logout'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'index'
+SOCIAL_AUTH_LOGIN_URL = 'logins'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '869426508133516'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'a0a555ad59bad7d45f3c5197147a3fea'
+#
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '692223585058-ehffp0k7gqoiig56r5371qef23a9ouhn.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'

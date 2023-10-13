@@ -167,6 +167,29 @@ a.facebook .facebook-icon{
     left: 15px;
     transform: translateY(-50%);
 }
+
+a.google{
+    color: #fff;
+    background-color: #0c8ff2;
+}
+a.google .google-icon{
+    height: 28px;
+    width: 28px;
+    color:#d64a04;
+    font-size: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+.google-icon{
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+
 #my-signin2{
 position:relative;
 display:block;
