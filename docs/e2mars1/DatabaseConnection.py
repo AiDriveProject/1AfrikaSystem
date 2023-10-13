@@ -42,6 +42,7 @@ try:
         cursor.execute(select_query)
         result = cursor.fetchone()
         cursor.close()
+
         if result is not None:
             print("Operation Successful Completed ", result[0])
             return result
