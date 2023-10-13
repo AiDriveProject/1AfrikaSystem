@@ -29,9 +29,17 @@ try:
         connection.commit()
         print("Creating Table processed as successfully.")
 
+    def TABLE_creations():
+        cursor = connection.cursor()
+        insert_query =f"CREATE TABLE `Customer_Product_Details`(`User_Details_id`bigint unsigned NOT NULL AUTO_INCREMENT,`image`LONGBLOB NOT NULL,`full_name`varchar(50)NOT NULL,`email`varchar(50) NOT NULL,`phone`  INT(11) NOT NULL,`select`varchar(50)  NOT  NULL,`password`varchar(50)NOT NULL,`last_update`timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY(`User_Details_id`))"
+        cursor.execute(insert_query)
+        connection.commit()
+        print("Creating Table processed as successfully.")
+
+
     def TABLE_creation_ForTaxi_Driver_in_User_Detail():
         cursor = connection.cursor()
-        insert_query =f"CREATE TABLE `User_Taxi_Driver_Details`(`User_Driver_Details_id`bigint unsigned NOT NULL AUTO_INCREMENT,`Selfie_image`LONGBLOB NOT NULL,`User_National_ID`LONGBLOB NOT NULL,`User_Driving_LincenseID`LONGBLOB NOT NULL,`Name`varchar(50)NOT NULL,`Second_name`varchar(50)NOT NULL,`Last_name`varchar(50) NOT NULL,`Location`varchar(200) NOT NULL,`Work_Experiance_Age`varchar(50) NOT NULL,`Phone_Number`  INT(15) NOT NULL,`Nationality`varchar(100)  NOT  NULL,`password`varchar(50)NOT NULL,`last_update`timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY(`User_Details_id`))"
+        insert_query =f"CREATE TABLE `User_Taxi_Driver_Details`(`User_Driver_Details_id`bigint unsigned NOT NULL AUTO_INCREMENT,`Customer_ID` INT(19) NOT NULL,`Selfie_image`LONGBLOB NOT NULL,`User_National_ID`LONGBLOB NOT NULL,`User_Driving_LincenseID`LONGBLOB NOT NULL,`Name`varchar(50)NOT NULL,`Second_name`varchar(50)NOT NULL,`Last_name`varchar(50) NOT NULL,`Location`varchar(200) NOT NULL,`Work_Experiance_Age`varchar(50) NOT NULL,`Phone_Number`  INT(15) NOT NULL,`Nationality`varchar(100)  NOT  NULL,`password`varchar(50)NOT NULL,`last_update`timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY(`User_Driver_Details_id`))"
         cursor.execute(insert_query)
         connection.commit()
         print("Creating Table processed as successfully.")

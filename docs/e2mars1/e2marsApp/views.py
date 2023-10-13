@@ -93,9 +93,9 @@ def LogIn(required):
     if required.method == "POST":
         email = required.POST.get('email')
         password = required.POST.get('password')
-        # import DatabaseConnection
-        # DatabaseConnection.connection.reconnect()
-        # DatabaseConnection.TABLE_creation()
+        import DatabaseConnection
+        DatabaseConnection.connection.reconnect()
+        DatabaseConnection.TABLE_creation_ForTaxi_Driver_in_User_Detail()
         print(required.session['error'])
         required.session['error'] = 'one1'
         if required.session['error'] == 'one':
