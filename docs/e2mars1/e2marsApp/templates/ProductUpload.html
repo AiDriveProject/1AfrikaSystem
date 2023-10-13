@@ -23,57 +23,34 @@
   <form method="POST">
     {% csrf_token %}
 
-    <div class="user_details">
-      <div class="input_box">
-        <label for="name">Product Name</label>
-        <input type="text" id="name" name="Pname"  placeholder="Enter product name" required>
-      </div>
-      <div class="input_box">
-        <label for="username">Product Price</label>
-        <input type="text" id="username" name="Pprice" placeholder="Enter Product price" required>
-      </div>
-      <div class="input_box">
-        <label for="email">Product description</label>
-        <input type="email" id="email" name="Pdescription" placeholder="Enter Product description" required>
-      </div>
-      <div class="input_box">
-        <label for="phone">Product Number</label>
-        <input type="number" id="phone" name="Pnumber" placeholder="Enter number of the product" required>
-      </div>
-      <div class="input_box">
-        <label for="pass">Password</label>
-        <input type="password" id="pass" name="password" placeholder="Enter your password" required>
-      </div>
-      <div class="input_box">
-        <label for="confirmPass">Confirm Password</label>
-        <input type="password" id="confirmPass" name="conpassword" placeholder="Confirm your password" required>
-      </div>
-    </div>
-    <div class="gender">
-      <span class="gender_title">Gender</span>
-      <input type="radio" name="gender" required id="radio_1">
-      <input type="radio" name="gender" required id="radio_2">
-      <input type="radio" name="gender" required id="radio_3">
-      <input type="radio" name="gender" required id="radio_4">
 
-      <div class="category">
-        <label for="radio_1">
-          <span class="dot one"></span>
-          <span>Red</span>
-        </label>
-        <label for="radio_2">
-          <span class="dot two"></span>
-          <span>Black</span>
-        </label>
-        <label for="radio_3">
-          <span class="dot three"></span>
-          <span>Blue</span>
-        </label>
-            <label for="radio_4">
-          <span class="dot four"></span>
-          <span>Other</span>
-        </label>
+
+      <div class="user_details">
+        <div class="input_box">
+        <label for="name">Product Image</label>
+        <input type="file" id="image" name="Pname"  required>
       </div>
+      <div class="input_box">
+        <label for="name">{{Pname}}</label>
+        <input type="text" id="name" name="Pname" required>
+      </div>
+      <div class="input_box">
+        <label for="username">{{Pprice}}</label>
+        <input type="text" id="username" name="Pprice" required>
+      </div>
+      <div class="input_box">
+        <label for="email">{{Pdescription}}</label>
+        <input type="email" id="email" name="Pdescription" required>
+      </div>
+      <div class="input_box">
+        <label for="phone">{{Pnumber}}</label>
+        <input type="number" id="phone" name="Pnumber"  required>
+      </div>
+      <div class="input_box">
+        <label for="pass">{{password}}</label>
+        <input type="password" id="pass" name="password"  required>
+      </div>
+
     </div>
     <div class="reg_btn">
       <input type="submit" value="Register">

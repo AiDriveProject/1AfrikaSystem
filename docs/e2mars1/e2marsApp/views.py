@@ -1,10 +1,9 @@
 import json
-import os
-import json
-import os
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-
+import os
+from django.conf import settings
+from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import redirect
 from io import BytesIO
@@ -22,6 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 
@@ -86,36 +86,67 @@ def Team(required):
 
 
 def LogIn(required):
+    if required.session['error'] == 4:
+        required.session['error'] = 1
+        print( required.session['error'] )
+        return render(required, "logins.html", {'error': 'Account Not Found'})
     if required.method == "POST":
         email = required.POST.get('email')
         password = required.POST.get('password')
-
+        # import DatabaseConnection
+        # DatabaseConnection.connection.reconnect()
+        # DatabaseConnection.TABLE_creation()
+        print(required.session['error'])
+        required.session['error'] = 'one1'
+        if required.session['error'] == 'one':
+            print('The session is None')
+            return render(required, "logins.html", {'error': 'I'})
         if email:
             required.session['email'] = email
             required.session['password'] = password
+
             return HttpResponseRedirect('DashBoard')
 
     return render(required, "logins.html")
 
 
 def Product(required):
+    account_type = required.session['Account_Type']
+    print(account_type)
+
+    if account_type == "car-service":
+        print("Validation Completed As Successfully")
+        return render(required, "ProductUpload.html", {'Pname': 'Car Name', 'Pprice': 'Plate', 'Pdescription': 'Car document', 'Pnumber': 'Service', 'password': 'Car Description' })
+
     if required.method == "POST":
         pname = required.POST.get('Pname')
         pprice = required.POST.get('Pprice')
         pdescription = required.POST.get('Pdescription')
         pnumber = required.POST.get('Pnumber')
         ppassword = required.POST.get('password')
-        pconpassword = required.POST.get('conpassword')
+
         gender = required.POST.get('gender')
         print(
             f'{pname} || {pprice} || {pdescription} || {pnumber} || {ppassword} || {pconpassword} || {gender}')
 
-    return render(required, "ProductUpload.html")
+        id = required.session['Account_ID']
+
+    return render(required, "ProductUpload.html", {})
 
 
 def Register(required):
     if required.method == "POST":
-        imageUpload = required.POST.get('imageUpload')
+        if 'imageUpload' in required.FILES:
+            uploaded_file = required.FILES['imageUpload']
+            print(uploaded_file.name)
+            fs = FileSystemStorage()
+            image = fs.save(uploaded_file.name, uploaded_file)
+            print(image)
+
+        else:
+             url = f"media/download.png"
+             print("Not Found")
+
         email = required.POST.get('email')
         name = required.POST.get('name')
         service = required.POST.get('service')
@@ -124,9 +155,8 @@ def Register(required):
         conpassword = required.POST.get('conpassword')
         import DatabaseConnection
         DatabaseConnection.connection.reconnect()
-        DatabaseConnection.saving_in_MySQL_User_details_with_images("C:\\Users\\AppFactory\\Pictures\\Screenshots\\Images INsparation\\riana1.jpg", name, email, phone, service, password)
-        print(
-            f'Photo: {imageUpload} Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
+        DatabaseConnection.saving_in_MySQL_User_details_with_images(f"media/{image}", name, email, phone, service, password)
+        print(f'Photo: {image} Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
 
     return render(required, "Register.html")
 
@@ -144,7 +174,7 @@ class YourAppNameConfig(AppConfig):
         import e2mars1App.custom_filters
 
 def DashBoard(required):
-
+    required.session['error'] = 'one'
     if required.method == "POST":
         dashsearch = required.POST.get('dashsearch')
         print(f"Subscribe From Team Email : {dashsearch}")
@@ -153,11 +183,20 @@ def DashBoard(required):
     email = required.session['email']
     password = required.session['password']
 
+    required.session['error'] = None
     alldata = [{'name': "Baraka", 'age': 23}, {'name': "Daniel", 'age': 32}, {'name': "Luc", 'age': 12}]
     data = DatabaseConnection.Read_in_MySQL_Image(email, password)
-    if data is None:
-       return HttpResponseRedirect('LogIn', {'error': "Wrong password or Email"})
-
+    if data == 'one':
+       required.session['error'] = 4
+       print(required.session['error'])
+       return HttpResponseRedirect('LogIn',{'error','Account Not Found'})
+    else:
+        required.session['error'] = 'one'
+    required.session['error'] = 1
+    required.session['Account_Type'] = data[5]
+    required.session['Account_ID'] = data[0]
+    print(data[5])
+    required.session['error'] = 'one'
     return render(required, 'DashBoard.html', {'alldata': alldata, 'image': b64encode(data[1]), 'name': data[2]})
 
 def convert(data):
@@ -240,7 +279,6 @@ def detect_intent_text(project_id, session_id, text, language_code='en-US'):
     )
 
     return response.query_result
-
 
 @csrf_exempt
 @require_http_methods(['POST'])

@@ -15,7 +15,7 @@
         <h1>Register to our Car Service</h1>
         <p>OneAfrica_Car System provides Good car Services for All what Our Clients Deserves like Ford, Burnz etc.</p>
       </div>
-       <form method="POST">
+       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="title">
           <i class="fas fa-pencil-alt"></i> 
@@ -23,7 +23,7 @@
         </div>
         <div class="info">
 
-          <input type="file" name="imageUpload" accept="image/*">
+          <input type="file" name="imageUpload">
           <input class="f_name" type="text"  name="name" required placeholder="Full name">
           <input type="email" name="email" required placeholder="Email">
           <input type="text" name="phone" required placeholder="Phone number">

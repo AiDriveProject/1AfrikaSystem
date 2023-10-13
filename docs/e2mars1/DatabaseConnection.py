@@ -66,8 +66,6 @@ try:
         connection.commit()
         print("Creating Table processed as successfully.")
 
-
-
     def saving_in_MySQL_User_details_with_images(FilePath: str, name: str, email: str, phone: int, select: str, password: str):
         cursor = connection.cursor()
         with open(FilePath, "rb")as File_Ma:
@@ -96,7 +94,7 @@ try:
 
     def Read_in_MySQL_Image(email: str, password: str):
         cursor = connection.cursor()
-        select_query = f"SELECT * FROM `User_Details` WHERE email ='{email}' AND password = {password}"
+        select_query = f"SELECT * FROM `User_Details` WHERE email ='{email}' AND password = '{password}'"
         cursor.execute(select_query)
         result = cursor.fetchone()
         cursor.close()
@@ -106,12 +104,11 @@ try:
 
         else:
             print("Not Found")
+            return 'one'
+
         # Commit the transaction to save the changes
         connection.commit()
         print("Value processed as successfully.")
-
-
-
 
     def Read_in_MySQL_Image_ALL():
         cursor = connection.cursor()

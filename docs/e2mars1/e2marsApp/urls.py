@@ -1,8 +1,11 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path("", views.Home),
+    path("/", views.Home),
+    path("Home", views.Home),
     path('dashboard/', views.DashBoard, name='DashBoard'),
     path("DashBoard", views.DashBoard, name='display_data'),
     path("Restaurant", views.OrderFood),
@@ -16,5 +19,9 @@ urlpatterns = [
     path("Team", views.Team),
     path("Taxi", views.Taxi),
     path('api/endpoint', views.chatbot_view, name='chatbot_view'),
+
 ]
+
+if settings.DEBUG:
+   urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
