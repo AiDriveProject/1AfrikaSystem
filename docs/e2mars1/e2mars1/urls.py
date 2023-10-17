@@ -17,11 +17,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from social_django.urls import urlpatterns as social_django_urls
+
 
 app_name = 'e2marsApp'
 urlpatterns = [
     path("", include("e2marsApp.urls")),
-    path('accounts/', include('allauth.urls')),
+    path('', include('allauth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('social-auth/', include('social_django.urls', namespace='social')),
 

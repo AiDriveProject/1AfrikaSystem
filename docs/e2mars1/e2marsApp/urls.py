@@ -1,10 +1,13 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_view
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("/", views.Home),
+    path('social/signup/', views.LogIn, name='logins'),
+    path('logins', views.LogIn, name='logins'),
+    path('', views.Home),
     path("Home", views.Home),
     path('dashboard/', views.DashBoard, name='DashBoard'),
     path("DashBoard", views.DashBoard, name='display_data'),

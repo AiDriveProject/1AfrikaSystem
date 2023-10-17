@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 import os
 from django.conf import settings
 from django.shortcuts import render
@@ -11,6 +11,8 @@ import base64
 from django import template
 import json
 import os
+from django.apps import AppConfig
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 import subprocess
@@ -22,6 +24,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from django.core.files.storage import FileSystemStorage
+
 
 # Create your views here.
 
@@ -40,10 +43,11 @@ def Home(required):
     return render(required, "index.html")
 
 
+@login_required
 def Transportation(required):
     return render(required, "FindItems.html")
 
-
+@login_required
 def Renting(required):
     if required.method == "POST":
         search = required.POST.get('search')
@@ -51,7 +55,7 @@ def Renting(required):
         print(f"search: {search} email: {email}")
     return render(required, "Selling.html")
 
-
+@login_required
 def Selling(required):
     if required.method == "POST":
         search = required.POST.get('search')
@@ -59,7 +63,7 @@ def Selling(required):
         print(f"search: {search} email: {email}")
     return render(required, "Selling.html")
 
-
+@login_required
 def OrderFood(required):
     if required.method == "POST":
         oneperson = required.POST.get('oneperson')
@@ -73,11 +77,12 @@ def OrderFood(required):
 
     return render(required, "Restaurant.html")
 
-
+@login_required
 def Repair(required):
     return render(required, "Repair.html")
 
 
+@login_required
 def Team(required):
     if required.method == "POST":
         TeamEmail = required.POST.get('TeamEmail')
@@ -86,9 +91,11 @@ def Team(required):
 
 
 def LogIn(required):
+    required.session['error'] = 1
+
     if required.session['error'] == 4:
         required.session['error'] = 1
-        print( required.session['error'] )
+        print(required.session['error'])
         return render(required, "logins.html", {'error': 'Account Not Found'})
     if required.method == "POST":
         email = required.POST.get('email')
@@ -96,7 +103,7 @@ def LogIn(required):
         # import DatabaseConnection
         # DatabaseConnection.connection.reconnect()
         # DatabaseConnection.TABLE_creation()
-        print(required.session['error'])
+        # print(required.session['error'])
         required.session['error'] = 'one1'
         if required.session['error'] == 'one':
             print('The session is None')
@@ -109,14 +116,16 @@ def LogIn(required):
 
     return render(required, "logins.html")
 
-
+@login_required
 def Product(required):
     account_type = required.session['Account_Type']
     print(account_type)
 
     if account_type == "car-service":
         print("Validation Completed As Successfully")
-        return render(required, "ProductUpload.html", {'Pname': 'Car Name', 'Pprice': 'Plate', 'Pdescription': 'Car document', 'Pnumber': 'Service', 'password': 'Car Description' })
+        return render(required, "ProductUpload.html",
+                      {'Pname': 'Car Name', 'Pprice': 'Plate', 'Pdescription': 'Car document', 'Pnumber': 'Service',
+                       'password': 'Car Description'})
 
     if required.method == "POST":
         pname = required.POST.get('Pname')
@@ -144,8 +153,8 @@ def Register(required):
             print(image)
 
         else:
-             url = f"media/download.png"
-             print("Not Found")
+            url = f"media/download.png"
+            print("Not Found")
 
         email = required.POST.get('email')
         name = required.POST.get('name')
@@ -155,23 +164,32 @@ def Register(required):
         conpassword = required.POST.get('conpassword')
         import DatabaseConnection
         DatabaseConnection.connection.reconnect()
-        DatabaseConnection.saving_in_MySQL_User_details_with_images(f"media/{image}", name, email, phone, service, password)
-        print(f'Photo: {image} Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
+        DatabaseConnection.saving_in_MySQL_User_details_with_images(f"media/{image}", name, email, phone, service,
+                                                                    password)
+        print(
+            f'Photo: {image} Email: {email} || Name: {name} || Sevice: {service} || Phone Number: {phone} || Password: {password} || Confirm Password: {conpassword}')
 
     return render(required, "Register.html")
 
+
 register = template.Library()
+
 
 @register.filter
 def b64encode(value):
     return base64.b64encode(value).decode('utf-8')
+
+
 # setting AppConfig
-from django.apps import AppConfig
+
+
 class YourAppNameConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'e2mars1App'
+
     def ready(self):
         import e2mars1App.custom_filters
+
 
 def DashBoard(required):
     required.session['error'] = 'one'
@@ -187,9 +205,9 @@ def DashBoard(required):
     alldata = [{'name': "Baraka", 'age': 23}, {'name': "Daniel", 'age': 32}, {'name': "Luc", 'age': 12}]
     data = DatabaseConnection.Read_in_MySQL_Image(email, password)
     if data == 'one':
-       required.session['error'] = 4
-       print(required.session['error'])
-       return HttpResponseRedirect('LogIn',{'error','Account Not Found'})
+        required.session['error'] = 4
+        print(required.session['error'])
+        return HttpResponseRedirect('LogIn', {'error', 'Account Not Found'})
     else:
         required.session['error'] = 'one'
     required.session['error'] = 1
@@ -198,6 +216,7 @@ def DashBoard(required):
     print(data[5])
     required.session['error'] = 'one'
     return render(required, 'DashBoard.html', {'alldata': alldata, 'image': b64encode(data[1]), 'name': data[2]})
+
 
 def convert(data):
     if isinstance(data, bytes):
@@ -245,6 +264,8 @@ def chatbot_view(request):
 
     else:
         return JsonResponse({'error': 'Invalid request method'})
+
+
 def Taxi(required):
     if required.method == "POST":
         dashsearch = required.POST.get('dashsearch')
@@ -279,6 +300,7 @@ def detect_intent_text(project_id, session_id, text, language_code='en-US'):
     )
 
     return response.query_result
+
 
 @csrf_exempt
 @require_http_methods(['POST'])

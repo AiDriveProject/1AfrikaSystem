@@ -24,11 +24,11 @@ SECRET_KEY = 'django-insecure-xinyjkry_+uk-v9q2_2(4ux4v4kmtfit9u&vfq3(7)#_g7v_ie
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', 'localhost']
 
 SITE_ID = 2
 # Application definition
-
+MEDIA_URL = '/media/'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "e2marsApp",
-    # "django.contrib.sites",
+    "django.contrib.sites",
     "allauth",
     "social_django",
     "allauth.account",
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     "allauth.socialaccount.providers.facebook",
 ]
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,14 +58,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 AUTHENTICATION_BACKENDS = [
-    # ...
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-    # ...
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.google.GoogleOAuth',
 ]
 
 SOCIALACCOUNT_QUERY_EMAIL = True
@@ -89,9 +90,9 @@ ROOT_URLCONF = 'e2mars1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         # 'DIRS': ['./templates', ],
-        'DIRS': ['templates/'],
+        # 'DIRS': ['templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -158,17 +159,21 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# login_url = 'logins'
-LOGIN_URL = 'logins'
+login_url = 'logins'
+# LOGIN_URL = 'logins'
 # LOGIN_REDIRECT_URL = 'index'
 login_redirect_url = "index"
-# logout_url = 'logout'
+logout_url = 'logins'
 
+LOGIN_URL = '/auth/login/google-oauth2/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'index'
 SOCIAL_AUTH_LOGIN_URL = 'logins'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '869426508133516'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'a0a555ad59bad7d45f3c5197147a3fea'
-#
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '692223585058-ehffp0k7gqoiig56r5371qef23a9ouhn.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
